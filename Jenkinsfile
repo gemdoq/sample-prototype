@@ -26,7 +26,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                sh 'docker build -t sampleprototype:latest .'
+                sh 'docker build -t ${DOCKER_IMAGE_NAME}:latest .'
             }
         }
 
@@ -34,13 +34,13 @@ pipeline {
             steps {
                 echo 'Deploying Docker container...'
                 // 기존 컨테이너 중지 및 제거
-                sh 'docker stop sampleprototype-container || true'
-                sh 'docker rm sampleprototype-container || true'
+                sh 'docker stop ${DOCKER_CONTAINER_NAME} || true'
+                sh 'docker rm ${DOCKER_CONTAINER_NAME} || true'
                 // 새 컨테이너 실행 (환경변수 주입)
                 sh """
-                    docker run -d --name sampleprototype-container \
+                    docker run -d --name \${DOCKER_CONTAINER_NAME} \
                     -e SERVER_PORT=\${TOMCAT_PORT} \
-                    -p \${TOMCAT_PORT}:\${TOMCAT_PORT} sampleprototype:latest
+                    -p \${TOMCAT_PORT}:\${TOMCAT_PORT} \${DOCKER_IMAGE_NAME}:latest
                 """
             }
         }
