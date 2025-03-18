@@ -46,17 +46,24 @@ pipeline {
             }
         }
 
-       stage('Deploy Docker Container') {
-           steps {
-               script {
-                   // 기존 컨테이너 삭제 (실패해도 무시)
-                   sh 'docker stop $DOCKER_CONTAINER_NAME || true'
-                   sh 'docker rm -f $DOCKER_CONTAINER_NAME || true'
+        stage('Deploy Docker Container') {
+            steps {
+                script {
+                    // 기존 컨테이너 삭제 (실패해도 무시)
+                    sh 'docker stop $DOCKER_CONTAINER_NAME || true'
+                    sh 'docker rm -f $DOCKER_CONTAINER_NAME || true'
 
-                   // Docker 컨테이너 실행 (동적으로 생성된 .env 파일을 사용)
-                   sh 'docker run -d -p $TOMCAT_PORT:$TOMCAT_PORT --env-file .env --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE'
-               }
-           }
-       }
+                    // Docker 컨테이너 실행 (TOMCAT_PORT 환경 변수를 명시적으로 전달)
+                    sh """
+                        docker run -d \
+                        -p ${TOMCAT_PORT}:${TOMCAT_PORT} \
+                        -e TOMCAT_PORT=${TOMCAT_PORT} \
+                        --env-file .env \
+                        --name ${DOCKER_CONTAINER_NAME} \
+                        ${DOCKER_IMAGE}
+                    """
+                }
+            }
+        }
     }
 }
