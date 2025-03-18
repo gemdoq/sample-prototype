@@ -2,46 +2,39 @@ pipeline {
     agent any
 
     environment {
-        // Jenkins에서 관리하는 환경변수 참조
-        DOCKER_IMAGE_NAME = credentials('DOCKER_IMAGE_NAME')
-        DOCKER_CONTAINER_NAME = credentials('DOCKER_CONTAINER_NAME')
-        TOMCAT_PORT = credentials('TOMCAT_PORT')
+        // Jenkins Credentials에서 환경변수 가져오기
+        TOMCAT_PORT = credentials('tomcat-port')
+        DOCKER_IMAGE = credentials('docker-image')
+        DOCKER_CONTAINER_NAME = credentials('docker-container-name')
     }
 
     stages {
-        stage('Clone Code') {
+        stage('Clone Repository') {
             steps {
-                echo 'Cloning the code from GitHub...'
-                git url: 'https://github.com/gemdoq/sample-prototype.git', branch: 'main', credentialsId: 'github-token'
+                // Private 리포지토리 접근을 위한 자격 증명 사용
+                git credentialsId: 'github-pat', url: 'https://github.com/YourUsername/spring-boot-cicd.git', branch: 'main'
             }
         }
 
-        stage('Build JAR') {
+        stage('Build with Gradle') {
             steps {
-                echo 'Building the Spring Boot JAR with Gradle...'
-                sh './gradlew clean build -x test'
+                sh './gradlew clean build'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                echo 'Building Docker image...'
-                sh 'docker build -t ${DOCKER_IMAGE_NAME}:latest .'
+                sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
         stage('Deploy Docker Container') {
             steps {
-                echo 'Deploying Docker container...'
                 // 기존 컨테이너 중지 및 제거
-                sh 'docker stop ${DOCKER_CONTAINER_NAME} || true'
-                sh 'docker rm ${DOCKER_CONTAINER_NAME} || true'
-                // 새 컨테이너 실행 (환경변수 주입)
-                sh """
-                    docker run -d --name \${DOCKER_CONTAINER_NAME} \
-                    -e SERVER_PORT=\${TOMCAT_PORT} \
-                    -p \${TOMCAT_PORT}:\${TOMCAT_PORT} \${DOCKER_IMAGE_NAME}:latest
-                """
+                sh "docker stop ${DOCKER_CONTAINER_NAME} || true"
+                sh "docker rm ${DOCKER_CONTAINER_NAME} || true"
+                // 새 컨테이너 실행
+                sh "docker run -d -p ${TOMCAT_PORT}:${TOMCAT_PORT} --name ${DOCKER_CONTAINER_NAME} ${DOCKER_IMAGE}"
             }
         }
     }
