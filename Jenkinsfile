@@ -24,17 +24,20 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE} ."
+                sh "docker build -t $DOCKER_IMAGE ."
             }
         }
 
         stage('Deploy Docker Container') {
             steps {
-                // 기존 컨테이너 중지 및 제거
-                sh "docker stop ${DOCKER_CONTAINER_NAME} || true"
-                sh "docker rm ${DOCKER_CONTAINER_NAME} || true"
-                // 새 컨테이너 실행
-                sh "docker run -d -p ${TOMCAT_PORT}:${TOMCAT_PORT} --name ${DOCKER_CONTAINER_NAME} ${DOCKER_IMAGE}"
+                script {
+                    // 기존 컨테이너 삭제 (실패해도 무시)
+                    sh 'docker stop $DOCKER_CONTAINER_NAME || true'
+                    sh 'docker rm -f $DOCKER_CONTAINER_NAME || true'
+
+                    // 새로운 컨테이너 실행 (포트 사용 중이면 다른 포트로 변경 가능)
+                    sh 'docker run -d -p $TOMCAT_PORT:$TOMCAT_PORT --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE'
+                }
             }
         }
     }
