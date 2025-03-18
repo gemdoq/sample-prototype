@@ -12,7 +12,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Private 리포지토리 접근을 위한 자격 증명 사용
-                git credentialsId: 'github-pat', url: 'https://github.com/YourUsername/spring-boot-cicd.git', branch: 'main'
+                git credentialsId: 'github-pat', url: 'https://github.com/gemdoq/sample-prototype.git', branch: 'main'
             }
         }
 
