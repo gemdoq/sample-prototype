@@ -31,6 +31,9 @@ pipeline {
         stage('Generate Env File') {
             steps {
                 script {
+                    // 환경변수 확인
+                    echo "TOMCAT_PORT: ${TOMCAT_PORT}"
+
                     // .env 파일을 생성하고 환경 변수를 추가
                     def envFileContent = ""
                     env.each { key, value ->
