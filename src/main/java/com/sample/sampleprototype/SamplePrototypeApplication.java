@@ -15,7 +15,7 @@ public class SamplePrototypeApplication {
 
 	@GetMapping("/hello")
 	public String hello() {
-		return "Hello, CI/CD!";
+		return "Hello, CI/CD! webhook triggered!";
 	}
 
 }
