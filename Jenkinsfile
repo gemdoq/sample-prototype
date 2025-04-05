@@ -42,6 +42,7 @@ pipeline {
                         docker run -d \
                         -p ${TOMCAT_PORT}:${TOMCAT_PORT} \
                         --name ${DOCKER_CONTAINER_NAME} \
+                        -e TOMCAT_PORT=${TOMCAT_PORT} \
                         ${DOCKER_IMAGE}
                     """
                 }
