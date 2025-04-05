@@ -7,5 +7,8 @@ WORKDIR /app
 # 빌드된 JAR 파일 복사
 COPY ./build/libs/*.jar app.jar
 
-# 컨테이너 실행 시 실행할 명령어 (환경변수 주입 가능)
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# 컨테이너에서 사용할 포트 노출 (문서화 용도)
+EXPOSE ${TOMCAT_PORT}
+
+# Spring Boot 실행 시 TOMCAT_PORT 환경변수를 사용하도록 설정
+ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${TOMCAT_PORT}"]
