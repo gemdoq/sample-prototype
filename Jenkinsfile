@@ -18,8 +18,11 @@ pipeline {
 
         stage('Build with Gradle') {
             steps {
-                sh 'chmod +x ./gradlew'
-                sh './gradlew clean build'
+                sh 'chmod +x gradlew'
+                sh '''
+                export TOMCAT_PORT=${TOMCAT_PORT}
+                ./gradlew clean build
+                '''
             }
         }
 
