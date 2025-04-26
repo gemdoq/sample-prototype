@@ -2,6 +2,7 @@ package com.sample.prototype.domain.board.model.entity;
 
 import com.sample.prototype.common.model.entity.BaseEntity;
 import com.sample.prototype.domain.comment.model.entity.Comment;
+import com.sample.prototype.domain.like.model.entity.Like;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,9 @@ public class Board extends BaseEntity {
 
 	@OneToMany(mappedBy = "board")
 	private List<Comment> comments = new ArrayList<>();
+
+	@OneToMany(mappedBy = "board")
+	private List<Like> likes = new ArrayList<>();
 
 	public Board(String title, String content, String author) {
 		this.title = title;
