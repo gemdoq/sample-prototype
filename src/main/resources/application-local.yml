@@ -23,4 +23,9 @@ spring:
       ddl-auto: create
     show-sql: true
     open-in-view: false
-    defer-datasource-initialization: true
+
+logging:
+  level:
+    com.sample.prototype.global.util.auth: DEBUG
+    com.sample.prototype.global.configuration: DEBUG
+    org.springframework.security: DEBUG
