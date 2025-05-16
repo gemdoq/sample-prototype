@@ -26,6 +26,7 @@ spring:
 
 logging:
   level:
+    com.sample.prototype: DEBUG
     com.sample.prototype.global.util.auth: DEBUG
     com.sample.prototype.global.configuration: DEBUG
     org.springframework.security: DEBUG
