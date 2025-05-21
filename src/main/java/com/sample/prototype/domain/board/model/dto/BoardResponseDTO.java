@@ -1,6 +1,7 @@
 package com.sample.prototype.domain.board.model.dto;
 
 import com.sample.prototype.domain.comment.model.dto.CommentResponseDTO;
+import com.sample.prototype.domain.like.model.dto.LikeResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +19,5 @@ public class BoardResponseDTO {
 	private LocalDateTime updatedDttm;
 	private int likeCount;
 	private List<CommentResponseDTO> comments;
+	private List<LikeResponseDTO> likes;
 }
