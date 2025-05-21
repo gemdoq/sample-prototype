@@ -35,4 +35,10 @@ public class User extends BaseEntity {
 		this.password = password;
 		this.role = role;
 	}
+
+	public void update(String username, String email, String password) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
 }

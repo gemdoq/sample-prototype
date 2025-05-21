@@ -1,6 +1,6 @@
 package com.sample.prototype.global.configuration;
 
-import com.sample.prototype.domain.user.UserRepository;
+import com.sample.prototype.domain.user.repository.UserRepository;
 import com.sample.prototype.domain.user.model.entity.User;
 import com.sample.prototype.domain.user.model.enums.Role;
 import org.springframework.boot.CommandLineRunner;

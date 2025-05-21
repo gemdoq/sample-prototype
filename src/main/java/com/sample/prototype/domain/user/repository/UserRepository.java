@@ -1,4 +1,4 @@
-package com.sample.prototype.domain.user;
+package com.sample.prototype.domain.user.repository;
 
 import com.sample.prototype.domain.user.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

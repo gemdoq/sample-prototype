@@ -1,6 +1,6 @@
 package com.sample.prototype.global.util.auth;
 
-import com.sample.prototype.domain.user.UserRepository;
+import com.sample.prototype.domain.user.repository.UserRepository;
 import com.sample.prototype.domain.user.model.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
