@@ -18,7 +18,7 @@ public class Response<T> {
 		this.status = status.value();
 	}
 
-	// 에러 응답을 위한 생성자
+	// 에러 응답을 위한 생성자: 비즈니스 로직 에러같은 단순 에러 상황을 컨트롤러에서 직접 처리
 	public Response(String message, HttpStatus status) {
 		this.result = "ERROR";
 		this.data = null;
