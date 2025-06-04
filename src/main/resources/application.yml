@@ -7,3 +7,14 @@ springdoc:
     path: /api-docs  # (선택) 기본은 /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html  # (선택) 기본은 /swagger-ui/index.html
+
+app:
+  validation:
+    allowed-email-domains:
+      - gmail.com
+      - naver.com
+      - daum.net
+      - hanmail.net
+      - kakao.com
+      - nate.com
+      - ".*\\.ac\\.kr"
