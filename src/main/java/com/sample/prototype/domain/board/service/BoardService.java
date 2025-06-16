@@ -9,12 +9,15 @@ import com.sample.prototype.domain.like.model.dto.LikeResponseDTO;
 import com.sample.prototype.global.exception.AppException;
 import com.sample.prototype.global.exception.Domain;
 import com.sample.prototype.global.exception.ErrorCode;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,10 +26,12 @@ public class BoardService {
 
 	private static final Logger log = LoggerFactory.getLogger(BoardService.class);
 	private final BoardRepository boardRepository;
+	private final Validator validator;
 
 	// 생성자 주입 방식 (Spring이 의존 객체를 자동으로 넣어줌)
-	public BoardService(BoardRepository boardRepository) {
+	public BoardService(BoardRepository boardRepository, Validator validator) {
 		this.boardRepository = boardRepository;
+		this.validator = validator;
 	}
 
 	// 전체 게시글 조회
@@ -58,6 +63,15 @@ public class BoardService {
 		log.debug("게시글 생성 요청: author={}", author);
 		// 게시글 엔티티 생성 및 저장
 		Board board = new Board(requestDTO.getTitle(), requestDTO.getContent(), author);
+		// 엔티티 유효성 검증
+		Set<ConstraintViolation<Board>> violations = validator.validate(board);
+		if (!violations.isEmpty()) {
+			String errorMessage = violations.stream()
+					.map(ConstraintViolation::getMessage)
+					.collect(Collectors.joining(", "));
+			log.warn("게시글 엔티티 유효성 검증 실패: errors={}", errorMessage);
+			throw new AppException(Domain.BOARD, ErrorCode.INVALID_REQUEST, errorMessage);
+		}
 		boardRepository.save(board);
 		log.debug("게시글 생성 완료: id={}", board.getId());
 		// Entity를 DTO로 변환
@@ -78,6 +92,15 @@ public class BoardService {
 		}
 		// 게시글 정보 수정
 		board.update(requestDTO.getTitle(), requestDTO.getContent());
+		// 엔티티 유효성 검증
+		Set<ConstraintViolation<Board>> violations = validator.validate(board);
+		if (!violations.isEmpty()) {
+			String errorMessage = violations.stream()
+					.map(ConstraintViolation::getMessage)
+					.collect(Collectors.joining(", "));
+			log.warn("게시글 엔티티 유효성 검증 실패: errors={}", errorMessage);
+			throw new AppException(Domain.BOARD, ErrorCode.INVALID_REQUEST, errorMessage);
+		}
 		boardRepository.save(board);
 		log.debug("게시글 수정 완료: id={}", id);
 		// Entity를 DTO로 변환
