@@ -34,6 +34,7 @@ public class AuthController {
 		if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
 			logger.debug("인증 상태: 인증됨, username={}", authentication.getName());
 			response.put("authenticated", true);
+			response.put("username", authentication.getName());
 			// 쿠키에서 JWT 토큰 추출
 			String jwtToken = null;
 			Cookie[] cookies = request.getCookies();
