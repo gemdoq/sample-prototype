@@ -106,7 +106,7 @@ class CommentRestControllerTest {
 							.contentType(MediaType.APPLICATION_JSON))
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("$.result").value("SUCCESS"))
-					.andExpect(jsonPath("$.data[0].content").value("Test Comment"))
+					.andExpect(jsonPath("$.data.content[0].content").value("Test Comment"))
 					.andDo(result -> log.debug("전체 댓글 조회 응답: {}", result.getResponse().getContentAsString()));
 
 			log.debug("전체 댓글 조회 테스트 완료");
