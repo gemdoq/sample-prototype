@@ -120,8 +120,8 @@ class SearchControllerTest {
 					.andExpect(jsonPath("$.result").value("SUCCESS"))
 					.andExpect(jsonPath("$.data.keyword").value("검색"))
 					.andExpect(jsonPath("$.data.searchType").value("ALL"))
-					.andExpect(jsonPath("$.data.boards").isArray())
-					.andExpect(jsonPath("$.data.comments").isArray())
+					.andExpect(jsonPath("$.data.boardPage.content").isArray())
+					.andExpect(jsonPath("$.data.commentPage.content").isArray())
 					.andExpect(jsonPath("$.data.users").isEmpty())
 					.andDo(result -> log.debug("전체 검색 응답: {}", result.getResponse().getContentAsString()));
 
@@ -141,9 +141,9 @@ class SearchControllerTest {
 					.andExpect(jsonPath("$.result").value("SUCCESS"))
 					.andExpect(jsonPath("$.data.keyword").value("제목"))
 					.andExpect(jsonPath("$.data.searchType").value("BOARD"))
-					.andExpect(jsonPath("$.data.boards").isArray())
-					.andExpect(jsonPath("$.data.boards[0].title").value("검색 테스트 제목"))
-					.andExpect(jsonPath("$.data.comments").isEmpty())
+					.andExpect(jsonPath("$.data.boardPage.content").isArray())
+					.andExpect(jsonPath("$.data.boardPage.content[0].title").value("검색 테스트 제목"))
+					.andExpect(jsonPath("$.data.commentPage.content").isEmpty())
 					.andExpect(jsonPath("$.data.users").isEmpty())
 					.andDo(result -> log.debug("게시글 검색 응답: {}", result.getResponse().getContentAsString()));
 
@@ -163,9 +163,9 @@ class SearchControllerTest {
 					.andExpect(jsonPath("$.result").value("SUCCESS"))
 					.andExpect(jsonPath("$.data.keyword").value("댓글"))
 					.andExpect(jsonPath("$.data.searchType").value("COMMENT"))
-					.andExpect(jsonPath("$.data.boards").isEmpty())
-					.andExpect(jsonPath("$.data.comments").isArray())
-					.andExpect(jsonPath("$.data.comments[0].content").value("검색 테스트 댓글"))
+					.andExpect(jsonPath("$.data.boardPage.content").isEmpty())
+					.andExpect(jsonPath("$.data.commentPage.content").isArray())
+					.andExpect(jsonPath("$.data.commentPage.content[0].content").value("검색 테스트 댓글"))
 					.andExpect(jsonPath("$.data.users").isEmpty())
 					.andDo(result -> log.debug("댓글 검색 응답: {}", result.getResponse().getContentAsString()));
 
@@ -183,8 +183,8 @@ class SearchControllerTest {
 							.param("type", "ALL"))
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("$.result").value("SUCCESS"))
-					.andExpect(jsonPath("$.data.boards").isEmpty())
-					.andExpect(jsonPath("$.data.comments").isEmpty())
+					.andExpect(jsonPath("$.data.boardPage.content").isEmpty())
+					.andExpect(jsonPath("$.data.commentPage.content").isEmpty())
 					.andExpect(jsonPath("$.data.users").isEmpty())
 					.andDo(result -> log.debug("검색 결과 없음 응답: {}", result.getResponse().getContentAsString()));
 
