@@ -9,4 +9,5 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
 	Page<Like> findAll(Pageable pageable);
 	boolean existsByBoardIdAndUsername(Long boardId, String username);
+	java.util.Optional<Like> findByBoardIdAndUsername(Long boardId, String username);
 }
