@@ -39,7 +39,7 @@
                         return;
                     }
                     console.log("login.html: 로그인 요청 데이터: username=" + username);
-                    fetch('/login', {
+                    fetch('/api/auth/login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
