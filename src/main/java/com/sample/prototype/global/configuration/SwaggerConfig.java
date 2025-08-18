@@ -96,4 +96,13 @@ public class SwaggerConfig {
 				.pathsToMatch("/api/auth/**")
 				.build();
 	}
+
+	// 파일 관련 API 그룹
+	@Bean
+	public GroupedOpenApi fileApi() {
+		return GroupedOpenApi.builder()
+				.group("파일 관련 API")
+				.pathsToMatch("/api/files/**")
+				.build();
+	}
 }
