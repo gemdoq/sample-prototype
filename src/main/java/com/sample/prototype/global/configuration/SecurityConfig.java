@@ -76,10 +76,13 @@ public class SecurityConfig {
 				.requestMatchers("/admin/**").hasRole("ADMIN") // /admin/** 경로는 ADMIN 권한만 접근 가능
 				.requestMatchers("/boards/new", "/boards/**").authenticated() // 게시판 생성 및 상세는 인증 필요
 				.requestMatchers("/api/likes/**", "/api/comments/**").authenticated() // 좋아요 및 댓글은 인증 필요
+				.requestMatchers(org.springframework.http.HttpMethod.POST, "/api/files/upload").authenticated() // 파일 업로드는 인증 필요
+				.requestMatchers("/api/files/admin/**").hasRole("ADMIN") // 파일 관리자 삭제는 ADMIN 권한 필요 (DELETE 전에 선언)
+				.requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/files/**").authenticated() // 일반 파일 삭제는 인증 필요
 				.requestMatchers("/api/users").hasRole("ADMIN") // 사용자 삭제는 ADMIN 권한만 접근 가능
 				.anyRequest().permitAll()                      // 나머지 요청은 모두 허용
 		);
-		log.debug("요청 권한 설정 완료: whitelist={}, admin=/admin/**, authenticated=/boards/new,/boards/**,/api/likes/**,/api/comments/**, admin=/api/users",
+		log.debug("요청 권한 설정 완료: whitelist={}, admin=/admin/**,/api/files/admin/**, authenticated=/boards/new,/boards/**,/api/likes/**,/api/comments/**,POST /api/files/upload,DELETE /api/files/**, admin=/api/users",
 				String.join(",", WHITELIST));
 
 		// 인증 실패, 인가 실패 시 처리 핸들러 설정
