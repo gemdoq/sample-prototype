@@ -5,8 +5,10 @@ import com.sample.prototype.domain.board.model.dto.BoardResponseDTO;
 import com.sample.prototype.domain.board.service.BoardService;
 import com.sample.prototype.domain.comment.model.dto.CommentRequestDTO;
 import com.sample.prototype.domain.comment.service.CommentService;
-import com.sample.prototype.domain.user.model.dto.UserRequestDTO;
 import com.sample.prototype.domain.user.model.dto.UserResponseDTO;
+import com.sample.prototype.domain.user.model.entity.User;
+import com.sample.prototype.domain.user.model.enums.Role;
+import com.sample.prototype.domain.user.repository.UserRepository;
 import com.sample.prototype.domain.user.service.UserService;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -46,8 +49,14 @@ class SearchControllerTest {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	private BoardResponseDTO testBoard;
-	private UserResponseDTO testUser;
+	private User testUser;
 
 	@BeforeEach
 	void setUp() {
@@ -64,12 +73,9 @@ class SearchControllerTest {
 			userService.deleteUsers(userIds);
 		}
 
-		// 테스트용 사용자 생성
-		UserRequestDTO userRequestDTO = new UserRequestDTO();
-		userRequestDTO.setUsername("searchTestUser");
-		userRequestDTO.setEmail("search@email.com");
-		userRequestDTO.setPassword("password123");
-		testUser = userService.createUser(userRequestDTO);
+		// 테스트용 사용자 생성 (Repository 직접 사용)
+		testUser = new User("searchTestUser", "search@email.com", passwordEncoder.encode("password123"), Role.USER);
+		userRepository.save(testUser);
 
 		// 테스트용 게시글 생성
 		BoardRequestDTO boardRequestDTO = new BoardRequestDTO();
