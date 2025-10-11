@@ -26,6 +26,9 @@ public class SignupVerificationRequestDTO {
 	@ValidEmailDomain
 	private String email;
 
+	@NotBlank(message = "휴대폰 번호는 필수입니다.")
+	private String phoneNumber;
+
 	@NotBlank(message = "비밀번호는 필수입니다.")
 	@Size(min = 8, max = 20, message = "비밀번호는 8~20자여야 합니다.")
 	private String password;
