@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  * 파일 메타데이터 엔티티
  */
 @Entity
-@Table(name = "files")
+@Table(name = "tb_file")
 @Getter
 @NoArgsConstructor
 public class FileEntity extends BaseEntity {
