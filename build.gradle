@@ -56,11 +56,15 @@ def loadEnv() {
 				def (key, value) = line.split('=', 2)
 				if (System.getenv(key.trim()) == null) {
 					// 환경변수가 설정되지 않은 경우에만 .env 값 사용
+					System.setProperty(key.trim(), value.trim())
 				}
 			}
 		}
 	}
 }
+
+// 빌드 시점에 환경변수 로드
+loadEnv()
 
 bootRun {
 	def envFile = file('.env')
